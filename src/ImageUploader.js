@@ -1,5 +1,3 @@
-import './App.css';
-
 import BookPreview from './BookPreview';
 import ImageMap from './ImageMap';
 import * as React from 'react';
@@ -13,7 +11,7 @@ import {Grid, Cell, BEHAVIOR} from 'baseui/layout-grid';
 import {useStyletron} from 'baseui';
 import { MessageCard } from "baseui/message-card";
 import {Card, StyledBody} from 'baseui/card';
-import { Tabs, Tab } from "baseui/tabs";
+
 
 const engine = new Styletron();
 
@@ -50,10 +48,10 @@ export default function ImageUploader() {
   const [isUploading, setIsUploading] = React.useState(false);
   const [bookPreviews, setBookPreviews] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState(false);
+  // const [bookshelfImage, setBookshelfImage] = React.useState(false);
   const [imageMap, setImageMap] = React.useState(false);
-  const [activeKey, setActiveKey] = React.useState("0");
-
   // const apiUrl = "http://localhost:8080";
+  // const apiUrl = "https://bookshelf-hrsxvmdbkq-uc.a.run.app";
   const apiUrl = "https://api.b3vr.com";
 
   const timeoutId = React.useRef(null);
@@ -91,6 +89,7 @@ export default function ImageUploader() {
 
     axios.post(apiUrl, formData)
     .then(res => {
+      // console.log(res.data['results']);
       const previews = []
 
       for (const book of res.data['results']) {
@@ -110,8 +109,9 @@ export default function ImageUploader() {
     });
   }
 
-function Banner() {
   return (
+    <StyletronProvider value={engine}>
+      <BaseProvider theme={DarkTheme}>
       <Outer>
       <Grid behavior={BEHAVIOR.fluid}>
         <Cell span={12}>
@@ -129,13 +129,6 @@ function Banner() {
         </Cell>
       </Grid>
     </Outer>
-  )
-}
-
-  return (
-    <StyletronProvider value={engine}>
-      <BaseProvider theme={DarkTheme}>
-        {Banner()}
       <Outer>
       <Grid behavior={BEHAVIOR.fluid}>
         <Cell span={12}>
@@ -144,6 +137,7 @@ function Banner() {
       overrides={{Root: {style: {width: '800px'}}}}
       // headerImage={bookshelfImage}
       title="" >
+        {imageMap}
       <StyledBody>
           <FileUploader
             onCancel={reset}
@@ -164,30 +158,7 @@ function Banner() {
         </Cell>
       </Grid>
     </Outer>
-      <Outer>
-      <Grid behavior={BEHAVIOR.fluid}>
-        <Cell span={12}>
-          <Inner>
-          <Card
-      overrides={{Root: {style: {width: '800px'}}}}
-      // headerImage={bookshelfImage}
-      title="" >
-    <Tabs
-      onChange={({ activeKey }) => {
-        setActiveKey(activeKey);
-      }}
-      activeKey={activeKey}
-    >
-      <Tab title="Bookshelf">
-        {imageMap}
-      </Tab>
-    <Tab title="Books">{bookPreviews}</Tab>
-    </Tabs>
-        </Card>
-          </Inner>
-        </Cell>
-      </Grid>
-    </Outer>
+          {bookPreviews}
       </BaseProvider>
     </StyletronProvider>
   );
