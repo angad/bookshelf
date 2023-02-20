@@ -174,14 +174,6 @@ function Banner() {
       size="full"
       anchor="bottom"
     >
-      <Outer>
-      <Grid behavior={BEHAVIOR.fluid}>
-        <Cell span={12}>
-          <Inner>
-          <Card
-      overrides={{Root: {style: {width: '800px'}}}}
-      // headerImage={bookshelfImage}
-      title="" >
     <Tabs
       onChange={({ activeKey }) => {
         setActiveKey(activeKey);
@@ -193,11 +185,6 @@ function Banner() {
       </Tab>
     <Tab title="Books">{bookPreviews}</Tab>
     </Tabs>
-        </Card>
-          </Inner>
-        </Cell>
-      </Grid>
-    </Outer>
     </Drawer>
       </BaseProvider>
     </StyletronProvider>
