@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import L from "leaflet";
 
-import { MapContainer, Popup, Polygon, ImageOverlay } from "react-leaflet";
+import { MapContainer, Popup, ImageOverlay, CircleMarker } from "react-leaflet";
 import BookPreviewCard from './BookPreviewCard';
 
 export default function ImageMap(bookshelfImage, width, height, books) {
@@ -21,6 +21,7 @@ export default function ImageMap(bookshelfImage, width, height, books) {
   const wh = [h, w];
   const origin = [0, 0];
   const bounds = [origin, wh];
+  const maxBounds = [[-400, -400], [h + 400, w + 400]];
   const blackOptions = { color: 'red' }
 
   const rectangles = [];
@@ -32,15 +33,21 @@ export default function ImageMap(bookshelfImage, width, height, books) {
       var k = rotate(h / 2, w / 2, x, y, 180);
       bounding_box.push(k);
     }
+    const center = [(bounding_box[1][0] + bounding_box[3][0])/2, (bounding_box[1][1] + bounding_box[3][1])/2];
     rectangles.push(
-      <Polygon
-      key={book['bookshelf_query_full']}
-      positions={bounding_box}
-      pathOptions={blackOptions}>
-        <Popup>
-          {BookPreviewCard(book)}
-        </Popup>
-      </Polygon>
+      <CircleMarker center={center} radius={10} pathOptions={blackOptions}>
+         <Popup>
+           {BookPreviewCard(book)}
+         </Popup>
+      </CircleMarker>
+      // <Polygon
+      // key={book['bookshelf_query_full']}
+      // positions={bounding_box}
+      // pathOptions={blackOptions}>
+      //   <Popup>
+      //     {BookPreviewCard(book)}
+      //   </Popup>
+      // </Polygon>
       );
   }
 
@@ -51,7 +58,7 @@ export default function ImageMap(bookshelfImage, width, height, books) {
         boundsOptions={{
           padding: [0, 0]
         }}
-        // maxBounds={bounds}
+        // maxBounds={maxBounds}
         // zoomSnap={0}
         minZoom={-2}
         whenReady={(e) => e.target.fitBounds(bounds)}

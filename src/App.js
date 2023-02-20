@@ -16,6 +16,8 @@ import {Card, StyledBody} from 'baseui/card';
 import { Tabs, Tab } from "baseui/tabs-motion";
 import { Drawer } from "baseui/drawer";
 import AddToHomeScreen from '@ideasio/add-to-homescreen-react';
+import { Button } from "baseui/button";
+// import { MobileHeader } from "baseui/mobile-header";
 
 const engine = new Styletron();
 
@@ -71,15 +73,19 @@ export default function ImageUploader() {
 
   function displayImageMap(file, books) {
     var _URL = window.URL || window.webkitURL;
-    var img = new Image();
     var objectUrl = _URL.createObjectURL(file);
+    displayImageMapUrl(objectUrl, books);
+  }
+
+  function displayImageMapUrl(url, books) {
+    var img = new Image();
     img.onload = function () {
-        setImageMap(ImageMap(objectUrl, this.width, this.height, books));
-        // _URL.revokeObjectURL(objectUrl);
+        setImageMap(ImageMap(url, this.width, this.height, books));
     };
-    img.src = objectUrl;
+    img.src = url;
     return img;
   }
+
 
   function uploadImage(files) {
     setBookPreviews([]);
@@ -98,7 +104,33 @@ export default function ImageUploader() {
       for (const book of res.data['results']) {
         previews.push(BookPreview(book));
       }
+      console.log(files[0]);
       displayImageMap(files[0], res.data['results']);
+      setBookPreviews(previews);
+      setIsOpen(true);
+      reset();
+    })
+    .catch(err => {
+      if ("error" in err.response.data) {
+        setErrorMessage(err.response.data["error"]);
+      }
+      else {
+        setErrorMessage("Something went wrong. Please try again.");
+      }
+    });
+  }
+
+  function sample() {
+    axios.get(apiUrl + "/sample")
+    .then(res => {
+      const previews = []
+      const data = res.data.results
+      console.log(data)
+
+      for (const book of data.results) {
+        previews.push(BookPreview(book));
+      }
+      displayImageMapUrl(apiUrl + "/sample/example.jpeg", data.results);
       setBookPreviews(previews);
       setIsOpen(true);
       reset();
@@ -163,6 +195,11 @@ function Banner() {
             maxSize={1e7}
           />
       </StyledBody>
+      <Outer>
+        <Inner>
+          <Button shape="pill" onClick={() => sample()}>Try Sample! 🚀</Button>
+        </Inner>
+      </Outer>
       </Card>
           </Inner>
         </Cell>
@@ -175,17 +212,33 @@ function Banner() {
       size="full"
       anchor="bottom"
     >
+       {/* <MobileHeader
+          title="Header title"
+          // navButton={{
+          //   onClick: () => console.log('Nav Button Click'),
+          //   label: 'Back',
+          // }}
+          // actionButtons={[
+          //   {
+          //     onClick: () => console.log('Check Button Click'),
+          //     label: 'Action',
+          //   },
+          // ]}
+        > */}
     <Tabs
       onChange={({ activeKey }) => {
         setActiveKey(activeKey);
       }}
+      fill="fixed"
       activeKey={activeKey}
+      style={{position: "sticky", top:"0px"}}
     >
-      <Tab title="Bookshelf">
+      <Tab title="Bookshelf: Map">
         {imageMap}
       </Tab>
-    <Tab title="Books">{bookPreviews}</Tab>
+    <Tab title="Books: List">{bookPreviews}</Tab>
     </Tabs>
+    {/* </MobileHeader> */}
     </Drawer>
       </BaseProvider>
     </StyletronProvider>
