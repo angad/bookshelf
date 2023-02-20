@@ -13,7 +13,9 @@ import {Grid, Cell, BEHAVIOR} from 'baseui/layout-grid';
 import {useStyletron} from 'baseui';
 import { MessageCard } from "baseui/message-card";
 import {Card, StyledBody} from 'baseui/card';
-import { Tabs, Tab } from "baseui/tabs";
+import { Tabs, Tab } from "baseui/tabs-motion";
+import { Drawer } from "baseui/drawer";
+
 
 const engine = new Styletron();
 
@@ -52,7 +54,7 @@ export default function ImageUploader() {
   const [errorMessage, setErrorMessage] = React.useState(false);
   const [imageMap, setImageMap] = React.useState(false);
   const [activeKey, setActiveKey] = React.useState("0");
-
+  const [isOpen, setIsOpen] = React.useState(false);
   // const apiUrl = "http://localhost:8080";
   const apiUrl = "https://api.b3vr.com";
 
@@ -98,6 +100,7 @@ export default function ImageUploader() {
       }
       displayImageMap(files[0], res.data['results']);
       setBookPreviews(previews);
+      setIsOpen(true);
       reset();
     })
     .catch(err => {
@@ -164,6 +167,13 @@ function Banner() {
         </Cell>
       </Grid>
     </Outer>
+    <Drawer
+      isOpen={isOpen}
+      autoFocus
+      onClose={() => setIsOpen(false)}
+      size="full"
+      anchor="bottom"
+    >
       <Outer>
       <Grid behavior={BEHAVIOR.fluid}>
         <Cell span={12}>
@@ -188,6 +198,7 @@ function Banner() {
         </Cell>
       </Grid>
     </Outer>
+    </Drawer>
       </BaseProvider>
     </StyletronProvider>
   );

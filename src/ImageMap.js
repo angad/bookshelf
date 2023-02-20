@@ -46,7 +46,7 @@ export default function ImageMap(bookshelfImage, width, height, books) {
 
   return (
       <MapContainer
-        // style={{ height: "100%", minHeight: "100%" }}
+        style={{ height: "100vh", minHeight: "100vh" }}
         bounds={bounds}
         boundsOptions={{
           padding: [0, 0]
