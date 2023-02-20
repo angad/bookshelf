@@ -15,7 +15,7 @@ import { MessageCard } from "baseui/message-card";
 import {Card, StyledBody} from 'baseui/card';
 import { Tabs, Tab } from "baseui/tabs-motion";
 import { Drawer } from "baseui/drawer";
-
+import AddToHomeScreen from '@ideasio/add-to-homescreen-react';
 
 const engine = new Styletron();
 
@@ -139,6 +139,7 @@ function Banner() {
     <StyletronProvider value={engine}>
       <BaseProvider theme={DarkTheme}>
         {Banner()}
+        <AddToHomeScreen />
       <Outer>
       <Grid behavior={BEHAVIOR.fluid}>
         <Cell span={12}>
