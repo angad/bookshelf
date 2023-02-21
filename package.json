@@ -17,7 +17,7 @@
     "react-ga": "^3.3.1",
     "react-leaflet": "^4.2.0",
     "react-scripts": "5.0.1",
-    "react-social-icons": "^5.15.0",
+    "react-twitter-widgets": "^1.11.0",
     "react-zoom-pan-pinch": "^2.2.1",
     "styletron-engine-atomic": "^1.5.0",
     "styletron-react": "^6.1.0",

@@ -8,16 +8,16 @@ import axios from 'axios';
 
 import { Client as Styletron } from 'styletron-engine-atomic';
 import { Provider as StyletronProvider } from 'styletron-react';
-import { DarkTheme, BaseProvider } from 'baseui';
+import { DarkTheme, BaseProvider, useStyletron, LocaleProvider } from 'baseui';
 import {Grid, Cell, BEHAVIOR} from 'baseui/layout-grid';
-import {useStyletron} from 'baseui';
 import { MessageCard } from "baseui/message-card";
-import {Card, StyledBody} from 'baseui/card';
+import {Card, StyledAction, StyledBody} from 'baseui/card';
 import { Tabs, Tab } from "baseui/tabs-motion";
 import { Drawer } from "baseui/drawer";
 import AddToHomeScreen from '@ideasio/add-to-homescreen-react';
 import { Button } from "baseui/button";
-import { SocialIcon } from 'react-social-icons';
+import  {Tweet} from 'react-twitter-widgets'
+
 // import { MobileHeader } from "baseui/mobile-header";
 
 import ReactGA from 'react-ga';
@@ -47,12 +47,22 @@ const Inner = ({children}) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '.25rem',
+        padding: '.5rem',
       })}
     >
       {children}
     </div>
   );
+};
+
+const fileUploaderLocale = {
+  "fileuploader": {
+    "dropFilesToUpload": "",
+    "or": "",
+    "browseFiles": "Upload Bookshelf Photo 📷",
+    "retry": "Retry Upload",
+    "cancel": "Cancel"
+  }
 };
 
 
@@ -178,45 +188,22 @@ export default function ImageUploader() {
     });
   }
 
-function Banner() {
-  return (
-      <Outer>
-      <Grid behavior={BEHAVIOR.fuid}>
-        <Cell span={12}>
-          <Inner>
-          <MessageCard
-      // overrides={{Root: {style: {width: '800px'}}}}
-      heading="Shazam for Bookshelves"
-      paragraph="Click a picture of a bookshelf and find your next read!"
-      image={{
-        src:
-          "https://images.unsplash.com/photo-1593430980369-68efc5a5eb34??ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80"
-      }}
-      // buttonLabel="Try Sample!"
-      // onClick={() => sample()}
-    />
-          </Inner>
-        </Cell>
-      </Grid>
-    </Outer>
-  )
-}
-
   return (
     <StyletronProvider value={engine}>
       <BaseProvider theme={DarkTheme}>
-        {Banner()}
         <AddToHomeScreen />
       <Outer>
-      <Grid behavior={BEHAVIOR.fluid}>
-        <Cell span={12}>
           <Inner>
           <Card
-      overrides={{Root: {style: {width: '800px'}}}}
-      // headerImage={bookshelfImage}
-      title="" >
+      overrides={{Root: {style: {width: '400px', textAlign: 'center'}}}}
+      headerImage={"https://images.unsplash.com/photo-1545696648-86c761bc5410?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80"}
+      title="Shazam for Bookshelves"
+       >
       <StyledBody>
+      Take a photo of a bookshelf and we'll tell you what books are on it!
+        <LocaleProvider locale={fileUploaderLocale}>
           <FileUploader
+            overrides={{Root: {style: {paddingTop: '20px'}}}}
             onCancel={reset}
             onDrop={(acceptedFiles, rejectedFiles) => {
               startProgress();
@@ -228,17 +215,22 @@ function Banner() {
             errorMessage={errorMessage}
             accept="image/*"
             maxSize={1e7}
-          />
+            contentMessage={`Take a picture of your bookshelf and upload it here!`}
+          /></LocaleProvider>
       </StyledBody>
-      <Outer>
-        <Inner>
-          <Button shape="pill" onClick={() => sample()}>Try Sample! 🚀</Button>
-        </Inner>
-      </Outer>
+      <StyledAction>
+        <Button
+          overrides={{
+            BaseButton: { style: { width: "100%" } }
+          }}
+          onClick = {() => sample()}
+        >
+         Try Sample! 🚀
+        </Button>
+      </StyledAction>
+    <Tweet tweetId="1627857007146414082" options={{ theme: "dark", width: "400px" }}/>
       </Card>
           </Inner>
-        </Cell>
-      </Grid>
     </Outer>
     <Drawer
       isOpen={isOpen}
