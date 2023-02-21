@@ -17,6 +17,7 @@ import { Tabs, Tab } from "baseui/tabs-motion";
 import { Drawer } from "baseui/drawer";
 import AddToHomeScreen from '@ideasio/add-to-homescreen-react';
 import { Button } from "baseui/button";
+import { SocialIcon } from 'react-social-icons';
 // import { MobileHeader } from "baseui/mobile-header";
 
 import ReactGA from 'react-ga';
@@ -93,6 +94,10 @@ export default function ImageUploader() {
 
 
   function uploadImage(files) {
+      ReactGA.event({
+        category: 'Home',
+        action: 'Image upload started'
+      });
     setBookPreviews([]);
     const formData = new FormData();
     formData.append(
@@ -176,7 +181,7 @@ export default function ImageUploader() {
 function Banner() {
   return (
       <Outer>
-      <Grid behavior={BEHAVIOR.fluid}>
+      <Grid behavior={BEHAVIOR.fuid}>
         <Cell span={12}>
           <Inner>
           <MessageCard
@@ -187,6 +192,8 @@ function Banner() {
         src:
           "https://images.unsplash.com/photo-1593430980369-68efc5a5eb34??ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80"
       }}
+      // buttonLabel="Try Sample!"
+      // onClick={() => sample()}
     />
           </Inner>
         </Cell>
