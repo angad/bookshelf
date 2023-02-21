@@ -19,6 +19,11 @@ import AddToHomeScreen from '@ideasio/add-to-homescreen-react';
 import { Button } from "baseui/button";
 // import { MobileHeader } from "baseui/mobile-header";
 
+import ReactGA from 'react-ga';
+
+const TRACKING_ID = "G-NQ25FXXTTT"; // OUR_TRACKING_ID
+ReactGA.initialize(TRACKING_ID);
+ReactGA.pageview(window.location.pathname + window.location.search);
 const engine = new Styletron();
 
 const Outer = ({children}) => {
@@ -100,6 +105,10 @@ export default function ImageUploader() {
     axios.post(apiUrl, formData)
     .then(res => {
       const previews = []
+      ReactGA.event({
+        category: 'Home',
+        action: 'Image uploaded successful'
+      });
 
       for (const book of res.data['results']) {
         previews.push(BookPreview(book));
@@ -108,9 +117,17 @@ export default function ImageUploader() {
       displayImageMap(files[0], res.data['results']);
       setBookPreviews(previews);
       setIsOpen(true);
+      ReactGA.event({
+        category: 'Home',
+        action: 'Upload API successful'
+      });
       reset();
     })
     .catch(err => {
+      ReactGA.event({
+        category: 'Home',
+        action: 'Upload API failure'
+      });
       if ("error" in err.response.data) {
         setErrorMessage(err.response.data["error"]);
       }
@@ -121,11 +138,14 @@ export default function ImageUploader() {
   }
 
   function sample() {
+      ReactGA.event({
+        category: 'Sample',
+        action: 'Sample button clicked'
+      });
     axios.get(apiUrl + "/sample")
     .then(res => {
       const previews = []
       const data = res.data.results
-      console.log(data)
 
       for (const book of data.results) {
         previews.push(BookPreview(book));
@@ -133,9 +153,17 @@ export default function ImageUploader() {
       displayImageMapUrl(apiUrl + "/sample/example.jpeg", data.results);
       setBookPreviews(previews);
       setIsOpen(true);
+      ReactGA.event({
+        category: 'Sample',
+        action: 'API sample successful'
+      });
       reset();
     })
     .catch(err => {
+      ReactGA.event({
+        category: 'Sample',
+        action: 'API sample failure'
+      });
       if ("error" in err.response.data) {
         setErrorMessage(err.response.data["error"]);
       }

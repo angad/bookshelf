@@ -58,7 +58,7 @@ export default function ImageMap(bookshelfImage, width, height, books) {
         boundsOptions={{
           padding: [0, 0]
         }}
-        // maxBounds={maxBounds}
+        maxBounds={maxBounds}
         // zoomSnap={0}
         minZoom={-2}
         whenReady={(e) => e.target.fitBounds(bounds)}
