@@ -1,6 +1,7 @@
 import './App.css';
 
 import BookPreview from './BookPreview';
+import Recommendations from './Recommendations';
 import ImageMap from './ImageMap';
 import * as React from 'react';
 import {FileUploader} from 'baseui/file-uploader';
@@ -125,7 +126,10 @@ export default function ImageUploader() {
         action: 'Image uploaded successful'
       });
 
-      for (const book of res.data['results']) {
+      previews.push(Recommendations("Your AI wingman says...", res.data.results.openai.summary))
+      previews.push(Recommendations("Recommendation: ", res.data.results.openai.recommendation))
+
+      for (const book of res.data.results.books) {
         previews.push(BookPreview(book));
       }
       console.log(files[0]);
@@ -160,7 +164,10 @@ export default function ImageUploader() {
     axios.get(apiUrl + "/sample")
     .then(res => {
       const previews = []
-      const data = res.data.results
+      const data = res.data.results.books
+
+      previews.push(Recommendations("Your AI wingman says...", res.data.results.openai.summary))
+      previews.push(Recommendations("Recommendation: ", res.data.results.openai.recommendation))
 
       for (const book of data.results) {
         previews.push(BookPreview(book));
@@ -228,7 +235,7 @@ export default function ImageUploader() {
          Try Sample! 🚀
         </Button>
       </StyledAction>
-    <Tweet tweetId="1627857007146414082" options={{ theme: "dark", width: "400px" }}/>
+    { <Tweet tweetId="1627857007146414082" options={{ theme: "dark", width: "400px" }}/> }
       </Card>
           </Inner>
     </Outer>
@@ -260,10 +267,10 @@ export default function ImageUploader() {
       activeKey={activeKey}
       style={{position: "sticky", top:"0px"}}
     >
+    <Tab title="Books: List">{bookPreviews}</Tab>
       <Tab title="Bookshelf: Map">
         {imageMap}
       </Tab>
-    <Tab title="Books: List">{bookPreviews}</Tab>
     </Tabs>
     {/* </MobileHeader> */}
     </Drawer>
